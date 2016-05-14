@@ -107,7 +107,10 @@ gulp.task('templates', function(callback) {
         relative: false
       }))
     )
-    .use(sitemap($.url))
+    .use(sitemap({
+      hostname: $.url,
+      omitExtension: true
+    }))
     .build(function(err) {
       if (err) {
         if (shouldWatch) {
