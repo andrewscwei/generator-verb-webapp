@@ -1,4 +1,4 @@
-# generator-verb-webapp[![Circle CI](https://circleci.com/gh/StudioVerb/generator-verb-webapp/tree/master.svg?style=svg)](https://circleci.com/gh/StudioVerb/generator-verb-webapp/tree/master) [![npm version](https://badge.fury.io/js/generator-verb-webapp.svg)](https://badge.fury.io/js/generator-verb-webapp)
+# generator-verb-webapp [![CircleCI](https://circleci.com/gh/StudioVerb/generator-verb-webapp.svg?style=svg&circle-token=d22c55a7cda54ba18131f6ccc998a38655bd7f90)](https://circleci.com/gh/StudioVerb/generator-verb-webapp) [![npm version](https://badge.fury.io/js/generator-verb-webapp.svg)](https://badge.fury.io/js/generator-verb-webapp)
 
 Verb's Yeoman generator for a static web app.
 
