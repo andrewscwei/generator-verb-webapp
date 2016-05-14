@@ -1,0 +1,13 @@
+node_modules
+bower_components
+include
+bin
+lib
+vendor
+public
+npm-debug.log
+.DS_STORE
+.tmp
+.jekyll-metadata
+.ruby-version
+.secrets

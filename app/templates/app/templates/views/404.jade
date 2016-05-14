@@ -1,0 +1,11 @@
+---
+title: 404 Not Found
+permalink: false
+---
+
+<% if (appauthor !== '') { %>//- (c) <%= appauthor %>
+<% } %>
+extends /layouts/base
+
+block body
+  h1= __('404')

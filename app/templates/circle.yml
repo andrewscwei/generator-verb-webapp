@@ -1,0 +1,25 @@
+machine:
+  environment:
+    TZ: PST8PDT
+  node:
+    version: 5.5.0
+dependencies:
+  pre:
+    - npm install -g npm
+  post:
+    - npm run build
+test:
+  post:
+    - sed -i -e '/public/d' .gitignore
+    - git config user.name "circleci"
+    - git config user.email "circleci@circleci.com"
+    - git add public
+    - git rm -rf app
+    - git rm -rf config
+    - git rm -rf tasks
+    - git rm -rf tests
+    - git rm -f .jshintrc
+    - git rm -f .editorconfig
+    - git rm -f circle.yml
+    - git rm -f README.md
+    - git commit -m "CircleCI build"

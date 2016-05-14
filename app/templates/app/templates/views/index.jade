@@ -1,0 +1,8 @@
+<% if (appauthor !== '') { %>//- (c) <%= appauthor %>
+<% } %>
+extends /layouts/base
+
+append vars
+
+block body
+  h1= __('hello.world')

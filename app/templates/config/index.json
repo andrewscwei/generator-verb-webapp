@@ -1,0 +1,9 @@
+{
+  "title": "<%= appname %>",
+  "url": "http://www.example.com",
+  "locales": ["en"],
+  "typekitId": null,
+  "autoRouting": true,
+  "collections": {
+  }
+}
