@@ -1,15 +1,14 @@
 <% if (appauthor !== '') { %>// (c) <%= appauthor %>
-<% } %>
-'use strict';
+<% } %>'use strict';
 
+const _ = require('lodash');
 const async = require('async');
 const browserSync = require('browser-sync');
 const chalk = require('chalk');
 const fs = require('fs-extra');
 const path = require('path');
 const request = require('supertest');
-const walk = require('walk');
-const _ = require('lodash');
+const task = require('../helpers/task-helpers');
 
 describe('app', function() {
   let app;
@@ -19,7 +18,7 @@ describe('app', function() {
     browserSync.reset();
 
     app = browserSync.init({
-      server: { baseDir: path.join(__dirname, '../', 'public') },
+      server: { baseDir: task.dest() },
       open: false,
       logLevel: 'silent'
     }, done).instance;
@@ -33,36 +32,36 @@ describe('app', function() {
     let paths = [];
     let error;
 
-    let walker = walk.walkSync(path.join(__dirname, '../', 'public'), {
-      listeners: {
-        file: function(root, fileStats) {
-          if (!_.endsWith(fileStats.name, '.html')) return;
-          let res = fs.readFileSync(path.join(root, fileStats.name), 'utf-8').match(/["|']((\/)([a-zA-Z0-9\-\_\/\.]+))["|']/g);
-          res.forEach((v, i) => {
-            let p = v.replace(/("|')/g, '');
-            if (!_.startsWith(p, '//') && !_.startsWith(p, 'http')) paths.push(p);
-          });
-        }
-      }
-    });
-
-    async.eachSeries(_.uniq(paths), function(path, callback) {
-      request(app.server)
-        .get(path)
-        .expect(200)
-        .end(function(err, res) {
-          if (err) {
-            error = err;
-            console.log(chalk.red('Request failed for:'), path);
-          }
-
-          callback();
+    fs
+      .walk(task.dest())
+      .on('data', function(item) {
+        if (item.stats.isDirectory() || !_.endsWith(item.path, '.html')) return;
+        let res = fs.readFileSync(item.path, 'utf-8').match(/["|']((\/)([a-zA-Z0-9\-\_\/\.]+))["|']/g);
+        res.forEach((v, i) => {
+          let p = v.replace(/("|')/g, '');
+          if (!_.startsWith(p, '//') && !_.startsWith(p, 'http')) paths.push(p);
         });
-    }, function() {
-      if (error)
-        throw error;
-      else
-        done();
-    });
+      })
+      .on('end', function() {
+        async.eachSeries(_.uniq(paths), function(path, callback) {
+          request(app.server)
+            .get(path)
+            .expect(200)
+            .end(function(err, res) {
+              if (err) {
+                error = err;
+                console.log(chalk.red('Request failed for:'), path);
+              }
+
+              callback();
+            });
+        }, function() {
+          if (error)
+            throw error;
+          else
+            done();
+        });
+      });
+
   });
 });

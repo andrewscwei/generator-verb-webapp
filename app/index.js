@@ -42,7 +42,27 @@ module.exports = yeoman.Base.extend({
   },
 
   writing: function() {
-    this.templateDirectory();
+    let files = this.expandFiles('**', { dot: true, cwd: this.sourceRoot() });
+
+    for (let i = 0; i < files.length; i++) {
+      let f = files[i];
+      let src = path.join(this.sourceRoot(), f);
+      let basename = path.basename(f);
+
+      switch (basename) {
+        case '.DS_Store':
+          // Do nothing
+          break;
+        case 'gitignore':
+          this.template(src, path.join(path.dirname(f), `.${basename}`));
+          break;
+        default:
+          if (~['.png', '.jpg', '.ico'].indexOf(path.extname(basename)))
+            this.copy(src, path.join(path.dirname(f), basename));
+          else
+            this.template(src, path.join(path.dirname(f), basename));
+      }
+    }
   },
 
   install: function() {

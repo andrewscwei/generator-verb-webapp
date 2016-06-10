@@ -1,10 +1,11 @@
 <% if (appauthor !== '') { %>// (c) <%= appauthor %>
-<% } %>
-'use strict';
+<% } %>'use strict';
 
-import WebFont from 'webfontloader';
-import pm from './managers/PageManager';
 import $ from '../../config';
+import pm from 'page-manager';
+
+pm.locales = $.locales;
+pm.autoRouting = $.autoRouting;
 
 // Put page routing/transitioning/loading logic here.
 // pm.transition('in', (next) => {
@@ -39,14 +40,6 @@ import $ from '../../config';
 
 // Begin routing after all requirements are defined. Comment out this line if
 // you do not want routing enabled.
-if ($.typekitId) {
-  WebFont.load({
-    typekit: { id: $.typekitId },
-    classes: false,
-    active: pm.startRouting,
-    inactive: pm.startRouting
-  });
-}
-else {
-  pm.startRouting();
-}
+pm.startRouting();
+
+console.log('Hello, world!');

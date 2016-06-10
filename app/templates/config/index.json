@@ -1,9 +1,20 @@
 {
-  "title": "<%= appname %>",
+  "title": "verb-webapp",
+  "description": "",
+  "keywords": "",
   "url": "http://www.example.com",
   "locales": ["en"],
-  "typekitId": null,
   "autoRouting": true,
-  "collections": {
+  "sourceDir": "app",
+  "buildDir": "public",
+  "configDir": "config",
+  "viewsDir": "app/views",
+  "cms": "prismic",
+  "webFont": {
+    "typekit": {
+      "id": null
+    }
+  },
+  "documents": {
   }
 }
