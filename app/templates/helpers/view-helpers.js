@@ -1,5 +1,6 @@
 <% if (appauthor !== '') { %>// (c) <%= appauthor %>
-<% } %>const $ = require('../config');
+<% } %>
+const $ = require('../config');
 const _ = require('lodash');
 const moment = require('moment');
 const requireDir = require('require-dir');

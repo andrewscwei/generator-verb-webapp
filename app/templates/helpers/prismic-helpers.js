@@ -1,5 +1,6 @@
 <% if (appauthor !== '') { %>// (c) <%= appauthor %>
-<% } %>const _ = require('lodash');
+<% } %>
+const _ = require('lodash');
 const moment = require('moment');
 const Prismic = require('prismic.io').Prismic;
 

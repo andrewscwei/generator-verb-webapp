@@ -1,5 +1,6 @@
 <% if (appauthor !== '') { %>// (c) <%= appauthor %>
-<% } %>'use strict';
+<% } %>
+'use strict';
 
 const _ = require('lodash');
 const async = require('async');

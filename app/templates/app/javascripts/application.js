@@ -1,5 +1,6 @@
 <% if (appauthor !== '') { %>// (c) <%= appauthor %>
-<% } %>'use strict';
+<% } %>
+'use strict';
 
 import $ from '../../config';
 import pm from 'page-manager';

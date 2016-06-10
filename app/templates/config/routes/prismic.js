@@ -1,5 +1,6 @@
 <% if (appauthor !== '') { %>// (c) <%= appauthor %>
-<% } %>'use strict';
+<% } %>
+'use strict';
 
 const $ = require('../../config');
 const _ = require('lodash');

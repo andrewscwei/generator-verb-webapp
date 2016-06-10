@@ -54,6 +54,7 @@ module.exports = yeoman.Base.extend({
           // Do nothing
           break;
         case 'gitignore':
+        case 'secrets':
           this.template(src, path.join(path.dirname(f), `.${basename}`));
           break;
         default:

@@ -1,5 +1,6 @@
 <% if (appauthor !== '') { %>// (c) <%= appauthor %>
-<% } %>const $ = require('../config');
+<% } %>
+const $ = require('../config');
 const path = require('path');
 
 /**
