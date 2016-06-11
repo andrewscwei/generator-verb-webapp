@@ -4,38 +4,39 @@ Verb's Yeoman generator for a static web app.
 
 ## Features
 
-- [Metalsmith](http://metalsmith.io) static template generator
-- [Gulp](http://gulpjs.com) asset pipeline
+- [gulp-sys-metalprismic](https://www.npmjs.com/package/gulp-sys-metalprismic) Gulp build system
+  - [Metalsmith](http://metalsmith.io) static template generator
   - [Sass](http://sass-lang.com) -> minified CSS
+  - [Webpack](https://webpack.github.io/)
   - [Babel](https://babeljs.io) ES6 -> ES5
+  - [BrowserSync](http://www.browsersync.io) as dev server
+  - [Prismic.io](http://prismic.io) support
   - Static asset revisioning (appending content hash to filenames)
-- [Webpack](https://webpack.github.io/)
-- [BrowserSync](http://www.browsersync.io) as dev server
+  - CDN path remapping
+  - i18n support
+- Client-side routing with [page-manager](https://www.npmjs.com/package/page-manager)
 - [CircleCI](https://circleci.com/) integration
-- [Contentful](http://contentful.com) support
-- i18n support
-- CDN path remapping
 - [H5BP favicon and app icon template](http://littlewebgiants.com/favicon-and-app-icon-template/)
 
 ## Requirements
 
-1. [Node](https://nodejs.org) `>=v5.0.0`
+1. [Node](https://nodejs.org) `>=v6.1.0`
 
 ## Structure
 
 ```
 .
-+-- .babelrc
++-- .buildpacks
 +-- .editorconfig
 +-- .gitignore
 +-- .jshintrc
 +-- .nvmrc
++-- .secrets
 +-- app
+|   +-- documents
 |   +-- fonts
 |   +-- images
 |   +-- javascripts
-|   |   +-- managers
-|   |   |   +-- PageManager.js
 |   |   +-- application.js
 |   +-- stylesheets
 |   |   +-- base
@@ -50,8 +51,10 @@ Verb's Yeoman generator for a static web app.
 |   +-- templates
 |   |   +-- layouts
 |   |   |   +-- base.jade
+|   |   |   +-- page.jade
 |   |   +-- views
 |   |   |   +-- 404.jade
+|   |   |   +-- 500.jade
 |   |   |   +-- index.jade
 |   +-- videos
 |   +-- apple-touch-icon-180x180-precomposed.png
@@ -84,25 +87,16 @@ Verb's Yeoman generator for a static web app.
 |   +-- data
 |   +-- locales
 |   |   +-- en.json
+|   +-- routes
+|   |   +-- prismic.js
 |   +-- index.json
 +-- node_modules
 +-- public
 +-- tasks
-|   +-- clean.js
-|   +-- contents.js
-|   +-- extras.js
-|   +-- fonts.js
-|   +-- images.js
-|   +-- index.babel.js
-|   +-- rev.js
-|   +-- scripts.js
-|   +-- serve.js
-|   +-- styles.js
-|   +-- templates.js
-|   +-- videos.js
-|   +-- watch.js
+|   +-- index.js
 +-- test
 |   +-- index.js
++-- app.js
 +-- circle.yml
 +-- package.json
 +-- README.md
