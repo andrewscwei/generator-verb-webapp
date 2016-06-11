@@ -45,7 +45,7 @@ Verb's Yeoman generator for a static web app.
 |   |   |   +-- palette.sass
 |   |   |   +-- typography.sass
 |   |   +-- views
-|   |   |   +-- 404.sass
+|   |   |   +-- errors.sass
 |   |   |   +-- welcome.sass
 |   |   +-- application.sass
 |   +-- templates
