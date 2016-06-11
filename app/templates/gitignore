@@ -12,6 +12,7 @@ npm-debug.log
 dump.rdb
 .DS_STORE
 .tmp
+.prismic
 .jekyll-metadata
 .ruby-version
 .secrets

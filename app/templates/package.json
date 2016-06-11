@@ -1,6 +1,6 @@
 {
   "name": "<%= appname %>",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "license": "MIT",
   "engines": {
@@ -41,7 +41,7 @@
     "gulp-sys-metalprismic": "^1.2.1",
     "mocha": "^2.5.3",
     "nodemon": "^1.9.2",
-    "page-manager": "^1.0.0",
+    "page-manager": "^1.0.1",
     "supertest": "^1.2.0",
     "webfontloader": "^1.6.24"
   }

@@ -77,21 +77,5 @@ module.exports = yeoman.Base.extend({
 
   end: function() {
     this.log(chalk.green('Finished generating app! See the generated ') + chalk.yellow('README.md') + chalk.green(' for more guidelines. To start developing right away, run: ') + chalk.yellow.bold('npm run dev'));
-  },
-
-  templateDirectory: function(source, destination) {
-    if (source === undefined) source = '';
-    if (destination === undefined) destination = '';
-
-    let root = this.isPathAbsolute(source) ? source : path.join(this.sourceRoot(), source);
-    let files = this.expandFiles('**', { dot: true, cwd: root });
-
-    for (let i = 0; i < files.length; i++) {
-      let f = files[i];
-      let src = path.join(root, f);
-      let dest = path.join(destination, path.dirname(f), path.basename(f));
-
-      if (path.basename(f) !== '.DS_Store') this.template(src, dest);
-    }
   }
 });
