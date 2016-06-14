@@ -3,7 +3,9 @@
 'use strict';
 
 import $ from '../../config';
+import _ from 'lodash';
 import pm from 'page-manager';
+import WebFont from 'webfontloader';
 
 pm.locales = $.locales;
 pm.autoRouting = $.autoRouting;
@@ -41,6 +43,15 @@ pm.autoRouting = $.autoRouting;
 
 // Begin routing after all requirements are defined. Comment out this line if
 // you do not want routing enabled.
-pm.startRouting();
+if ($.webFont) {
+  WebFont.load(_.merge($.webFont, {
+    classes: false,
+    active: pm.startRouting,
+    inactive: pm.startRouting
+  }));
+}
+else {
+  pm.startRouting();
+}
 
 console.log('Hello, world!');
