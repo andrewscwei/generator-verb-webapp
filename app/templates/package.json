@@ -6,6 +6,14 @@
   "engines": {
     "node": "6.1.0"
   },
+  "files": [
+    "app/views",
+    "config",
+    "helpers",
+    "logs",
+    "public",
+    "app.js"
+  ],
   "scripts": {
     "start": "node app",
     "test": "mocha tests --recursive --reporter spec",
@@ -38,7 +46,7 @@
   "devDependencies": {
     "async": "^2.0.0-rc.6",
     "chalk": "^1.1.3",
-    "gulp-sys-metalprismic": "^2.0.2",
+    "gulp-sys-metalprismic": "^2.0.3",
     "mocha": "^2.5.3",
     "nodemon": "^1.9.2",
     "page-manager": "^1.0.2",
