@@ -43,7 +43,7 @@ module.exports = yeoman.Base.extend({
   },
 
   writing: function() {
-    let files = glob.sync('**', { dot: true, cwd: this.sourceRoot() });
+    let files = glob.sync('**', { dot: true, cwd: this.sourceRoot(), nodir: true });
 
     for (let i = 0; i < files.length; i++) {
       let f = files[i];
