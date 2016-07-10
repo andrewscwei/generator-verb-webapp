@@ -1,5 +1,5 @@
 {
-  "title": "verb-webapp",
+  "title": "<%= appname %>",
   "description": "",
   "keywords": "",
   "url": "http://www.example.com",

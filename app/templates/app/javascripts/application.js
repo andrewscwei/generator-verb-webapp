@@ -11,6 +11,11 @@ pm.locales = $.locales;
 pm.autoRouting = $.autoRouting;
 
 // Put page routing/transitioning/loading logic here.
+// pm.request((newDocument, oldDocument, next) => {
+//   // Manipulate DOM per request.
+//   next();
+// });
+
 // pm.transition('in', (next) => {
 //   // Transition-in behavior for all paths.
 //   next();

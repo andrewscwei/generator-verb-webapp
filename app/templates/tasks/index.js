@@ -4,6 +4,7 @@
  *       changes and serve the app in the dev server.
  */
 
+const $ = require('../config');
 const gulp = require('gulp-sys-metalprismic');
 const task = require('../helpers/task-helpers');
 const view = require('../helpers/view-helpers');
@@ -12,21 +13,14 @@ gulp.init({
   base: task.src(),
   dest: task.dest(),
   scripts: {
-    entry: {
-      application: 'application.js'
-    },
-    resolve: {
-      root: [
-        task.config('data')
-      ]
-    }
+    entry: { application: 'application.js' },
+    resolve: { root: [task.config('data')] }
   },
-  views: {
+  views: process.env.PRISMIC_PREVIEWS_ENABLED ? false : {
     i18n: view.i18n(),
     metadata: view.metadata(),
-    collections: view.documents(),
-    watch: {
-      files: [task.config('**/*')]
-    }
+    collections: $.documents,
+    sitemap: { hostname: $.url },
+    watch: { files: [task.config('**/*')] }
   }
 });

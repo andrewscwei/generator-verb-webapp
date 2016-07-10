@@ -1,8 +1,12 @@
 <% if (appauthor !== '') { %>// (c) <%= appauthor %>
 <% } %>
+const $ = require('../config');
 const _ = require('lodash');
+const marked = require('marked');
 const moment = require('moment');
 const Prismic = require('prismic.io').Prismic;
+
+marked.setOptions({ langPrefix: 'language-' });
 
 /**
  * Gets the Prismic API.
@@ -61,7 +65,7 @@ exports.reduce = function(docs, relative) {
         let n = collection.length;
 
         collection.forEach((doc, i) => {
-          doc.prev = (i > 0) ? collection[i-1] : undefined;
+          doc.previous = (i > 0) ? collection[i-1] : undefined;
           doc.next = (i < (n - 1)) ? collection[i+1] : undefined;
         });
       }
@@ -73,13 +77,41 @@ exports.reduce = function(docs, relative) {
     let r = _.mapKeys(_.mapValues(docs.data, (v, k) => {
       switch (v.type) {
         case 'StructuredText':
-          return docs.getStructuredText(k).asText();
+          let ret = docs.getStructuredText(k).asText();
+          if ((k === 'markdown') || (k === `${docs.type}.markdown`)) ret = marked(ret);
+          return ret;
         case 'Image':
           return docs.getImage(k).url;
         case 'Number':
           return docs.getNumber(k);
         case 'SliceZone':
-          return docs.getSliceZone(k).asHtml();
+          return docs.getSliceZone(k).asHtml((doc) => {
+            let pattern = _.get($, `documents.${doc.type}.permalink`);
+            let ret = pattern;
+
+            if (pattern) {
+              const regex = /:(\w+)/g;
+              let params = [];
+              let m;
+              while (m = regex.exec(pattern)) params.push(m[1]);
+
+              for (let i = 0, key; key = params[i++];) {
+                let val = doc[key];
+                if (!val) return null;
+
+                ret = ret.replace(`:${key}`, val);
+              }
+
+              if (/((\/)?([a-zA-Z0-9\-\_\/\.]+))/g.test(ret)) {
+                if (!_.startsWith(ret, '/')) ret = `/${ret}`;
+                if (!_.endsWith(ret, '.html') && !_.endsWith(ret, '/')) ret = `${ret}/`;
+              }
+
+              return ret;
+            }
+
+            return null;
+          });
         case 'Date':
           return moment(docs.getDate(k)).format('YYYY-MM-DD');
         case 'Link.web':
