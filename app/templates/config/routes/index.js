@@ -77,7 +77,7 @@ router.get('/:collection/:page', (req, res, next) => {
   }
   else {
     const collection = req.params['collection'];
-    const docType = pluralize(collection);
+    const docType = pluralize(collection, 1);
     const pagination = view.pagination(collection, res.locals.data[docType], page);
 
     if (!pagination) {
@@ -92,7 +92,7 @@ router.get('/:collection/:page', (req, res, next) => {
 
 router.get('/:collection/:uid', (req, res, next) => {
   const collection = req.params['collection'];
-  const docType = _.endsWith(collection, 's') && collection.substr(0, collection.length-1) || collection;
+  const docType = pluralize(collection, 1);
   const uid = req.params['uid'];
   const data = _.find(_.get(res.locals.data, `${docType}`), o => (o.uid === uid));
 
