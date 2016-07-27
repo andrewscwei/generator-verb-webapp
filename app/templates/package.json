@@ -52,7 +52,6 @@
     "mocha": "^2.5.3",
     "nodemon": "^1.9.2",
     "page-manager": "^1.2.0",
-    "supertest": "^1.2.0",
-    "webfontloader": "^1.6.26"
+    "supertest": "^1.2.0"
   }
 }

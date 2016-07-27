@@ -5,7 +5,6 @@
 import $ from '../../config';
 import _ from 'lodash';
 import pm from 'page-manager';
-import WebFont from 'webfontloader';
 
 pm.locales = $.locales;
 pm.autoRouting = $.autoRouting;
@@ -46,14 +45,21 @@ pm.autoRouting = $.autoRouting;
 //   next();
 // });
 
-// Begin routing after all requirements are defined. Comment out this line if
-// you do not want routing enabled.
+// Begin routing after all requirements are defined.
 if ($.webFont) {
-  WebFont.load(_.merge($.webFont, {
-    classes: false,
-    active: pm.startRouting,
-    inactive: pm.startRouting
-  }));
+  if ($.webFont.typekit) {
+    try {
+      Typekit.load({
+        async: true,
+        classes: false,
+        active: pm.startRouting,
+        inactive: pm.startRouting
+      });
+    }
+    catch (err) {
+      pm.startRouting();
+    }
+  }
 }
 else {
   pm.startRouting();
