@@ -31,7 +31,7 @@ exports.path = function(p) {
   catch (err) {
     return p;
   }
-}
+}<% if (sitetype === 'static') { %>
 
 /**
  * Gets the path to the document under the given options.
@@ -106,7 +106,7 @@ exports.pagination = function(collectionName, collection, currentPage) {
   }
 
   return undefined;
-};
+};<% } %>
 
 /**
  * Gets the metadata (local variables) for views.

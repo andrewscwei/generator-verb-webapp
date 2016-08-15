@@ -27,19 +27,73 @@ module.exports = yeoman.Base.extend({
       type: Boolean
     });
 
-    this.log(yosay('\'Allo \'allo! Out of the box I include Sass, Browserify and a gulpfile.js to build your app.'));
+    this.option('s', {
+      desc: 'Skips the installation of dependencies',
+      type: Boolean
+    });
+
+    this.log(yosay('\'Allo \'allo! This is a web app generator.'));
   },
 
   prompting: function() {
     let questions = [{
       type: 'input',
       name: 'appauthor',
-      message: 'Who is the author? (this will appear in the header of your source files)'
+      message: 'Who is the author? (this will appear in the copyright header of your source files)'
+    }, {
+      type: 'list',
+      name: 'sitetype',
+      message: 'Is this a static or dynamic website?',
+      choices: [{
+        name: 'Static (Metalsmith)',
+        value: 'static'
+      }, {
+        name: 'Dynamic (Express)',
+        value: 'dynamic'
+      }]
+    }, {
+      type: 'list',
+      name: 'cms',
+      message: 'Do you need CMS support?',
+      choices: [{
+        name: 'No',
+        value: false
+      }, {
+        name: 'Prismic.io',
+        value: 'prismic'
+      }]
+    },{
+      type: 'checkbox',
+      name: 'features',
+      message: 'What more would you like?',
+      choices: [{
+        name: 'Client-side routing',
+        value: 'routing',
+        checked: false
+      }, {
+        name: 'CircleCI config',
+        value: 'circleci',
+        checked: false
+      }, {
+        name: 'Heroku config',
+        value: 'heroku',
+        checked: false
+      }, {
+        name: 'Custom scripts',
+        value: 'scripts',
+        checked: false
+      }]
     }];
 
-    return this.prompt(questions).then(function(answers) {
+    return this.prompt(questions).then(answers => {
       this.appauthor = answers.appauthor;
-    }.bind(this));
+      this.sitetype = answers.sitetype;
+      this.cms = answers.cms;
+      this.routing = answers.features.indexOf('routing') > -1;
+      this.circleci = answers.features.indexOf('circleci') > -1;
+      this.heroku = answers.features.indexOf('heroku') > -1;
+      this.scripts = answers.features.indexOf('scripts') > -1;
+    });
   },
 
   writing: function() {
@@ -48,7 +102,15 @@ module.exports = yeoman.Base.extend({
     for (let i = 0; i < files.length; i++) {
       let f = files[i];
       let src = path.join(this.sourceRoot(), f);
+      let dirname = path.dirname(f);
       let basename = path.basename(f);
+      let ignores = [];
+
+      if (this.cms !== 'prismic') ignores.push('prismic-helpers.js');
+      if (!this.circleci) ignores.push('circle.yml');
+      if (!this.heroku) ignores.push('.buildpacks');
+      if (!this.scripts) ignores.push('merge.sh');
+      if ((this.sitetype === 'static') && (this.cms !== 'prismic')) ignores.push('app.js', '.nodemonignore');
 
       switch (basename) {
         case '.DS_Store':
@@ -59,16 +121,20 @@ module.exports = yeoman.Base.extend({
           this.template(src, path.join(path.dirname(f), `.${basename}`));
           break;
         default:
-          if (~['.png', '.jpg', '.ico'].indexOf(path.extname(basename)))
+          if (~['.png', '.jpg', '.ico'].indexOf(path.extname(basename))) {
             this.copy(src, path.join(path.dirname(f), basename));
-          else
+          }
+          else if (ignores.indexOf(basename) < 0) {
+            if ((this.sitetype === 'static') && (this.cms !== 'prismic') && (_.endsWith(dirname, 'routes'))) break;
+            if ((this.sitetype === 'static') && (this.cms !== 'prismic') && (_.endsWith(dirname, 'logs'))) break;
             this.template(src, path.join(path.dirname(f), basename));
+          }
       }
     }
   },
 
   install: function() {
-    if (this.options['skip-install']) {
+    if (this.options['skip-install'] || this.options['s']) {
       this.log('Skipping node dependency installation. You will have to manually run ' + chalk.yellow.bold('npm install') + '.');
     } else {
       this.log(chalk.magenta('Installing node modules for you using your ') + chalk.yellow.bold('package.json') + chalk.magenta('...'));

@@ -3,7 +3,7 @@
 'use strict';
 
 import $ from '../../config';
-import _ from 'lodash';
+import _ from 'lodash';<% if (routing) { %>
 import pm from 'page-manager';
 
 pm.locales = $.locales;
@@ -46,23 +46,41 @@ pm.autoRouting = $.autoRouting;
 // });
 
 // Begin routing after all requirements are defined.
-if ($.webFont) {
-  if ($.webFont.typekit) {
-    try {
-      Typekit.load({
-        async: true,
-        classes: false,
-        active: pm.startRouting,
-        inactive: pm.startRouting
-      });
-    }
-    catch (err) {
-      pm.startRouting();
-    }
+if (_.get($, 'webFont.typekit.id')) {
+  try {
+    Typekit.load({
+      async: true,
+      classes: false,
+      active: pm.startRouting,
+      inactive: pm.startRouting
+    });
+  }
+  catch (err) {
+    pm.startRouting();
   }
 }
 else {
   pm.startRouting();
 }
 
-console.log('Hello, world!');
+console.log('Hello, world!');<% } else { %>
+if (_.get($, 'webFont.typekit.id')) {
+  try {
+    Typekit.load({
+      async: true,
+      classes: false,
+      active: init,
+      inactive: init
+    });
+  }
+  catch (err) {
+    init();
+  }
+}
+else {
+  init();
+}
+
+function init() {
+  console.log('Hello, world!');
+}<% } %>

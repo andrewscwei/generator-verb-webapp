@@ -4,112 +4,115 @@
 
 const $ = require('../../config');
 const _ = require('lodash');
-const log = require('debug')('app');
-const moment = require('moment');
-const path = require('path');
+const log = require('debug')('app');<% if (cms === 'prismic') { %>
 const pluralize = require('pluralize');
-const prismic = require('../../helpers/prismic-helpers');
+const prismic = require('../../helpers/prismic-helpers');<% } %>
 const router = require('express').Router();
 const view = require('../../helpers/view-helpers');
 
 router.use('/', (req, res, next) => {
   _.merge(res.locals, view.metadata());
+  next();
+});<% if (cms === 'prismic') { %>
 
-  prismic
-    .getAPI(process.env.PRISMIC_API_ENDPOINT, { accessToken: process.env.PRISMIC_ACCESS_TOKEN })
-    .then(api => {
-      const ref = req.cookies[prismic.previewCookie] || api.master();
-      const orderings = _.flatMap($.documents, (val, key) => (`my.${key}.${val.sortBy}${val.reverse ? ' desc' : ''}`));
-      res.locals.ctx = { api: api, ref: ref };
-      return prismic.getEverything(api, ref, '', orderings);
-    })
-    .then(response => {
-      const docs = prismic.reduce(response.results, true);
-      for (let docType in docs) {
-        const c = _.get($, `documents.${docType}`);
-        if (c && c.collection) docs[docType].forEach(doc => doc.path = view.documentPath(doc, $.documents));
-      }
-      _.merge(res.locals.data, docs);
-      next();
-    })
-    .catch(err => next());
-});
-
-router.get('/preview', (req, res, next) => {
-  const previewToken = req.query['token'];
-  const ctx = res.locals.ctx;
-
-  if (!previewToken) {
-    res.status(500).render('500', { message: 'No preview token provided' });
-  }
-  else {
-    ctx.api
-      .previewSession(previewToken, (doc) => (view.documentPath(doc, $.documents) || '/'), '/')
-      .then(url => {
-        res.cookie(prismic.previewCookie, previewToken, { maxAge: 60 * 30, path: '/', httpOnly: false });
-        res.redirect(url);
+if (process.env.PRISMIC_PREVIEWS_ENABLED) {
+  router.use('/', (req, res, next) => {
+    prismic
+      .getAPI(process.env.PRISMIC_API_ENDPOINT, { accessToken: process.env.PRISMIC_ACCESS_TOKEN })
+      .then(api => {
+        const ref = req.cookies[prismic.previewCookie] || api.master();
+        const orderings = _.flatMap($.documents, (val, key) => (`my.${key}.${val.sortBy}${val.reverse ? ' desc' : ''}`));
+        res.locals.ctx = { api: api, ref: ref };
+        return prismic.getEverything(api, ref, '', orderings);
       })
-      .catch(err => {
-        res.status(500).render('500', { message: err.message });
-      });
-  }
-});
+      .then(response => {
+        const docs = prismic.reduce(response.results, true);
+        for (let docType in docs) {
+          const c = _.get($, `documents.${docType}`);
+          if (c && c.collection) docs[docType].forEach(doc => doc.path = view.documentPath(doc, $.documents));
+        }
+        _.merge(res.locals.data, docs);
+        next();
+      })
+      .catch(err => next());
+  });
 
-router.get('/:collection', (req, res, next) => {
-  const collection = req.params['collection'];
-  const docType = pluralize(collection, 1);
-  const config = $.documents[docType];
+  router.get('/preview', (req, res, next) => {
+    const previewToken = req.query['token'];
+    const ctx = res.locals.ctx;
 
-  if (config) {
-    res.locals.pagination = view.pagination(collection, res.locals.data[docType], 1);
-    res.render(`layouts/${collection}`);
-  }
-  else {
-    next();
-  }
-});
+    if (!previewToken) {
+      res.status(500).render('500', { message: 'No preview token provided' });
+    }
+    else {
+      ctx.api
+        .previewSession(previewToken, (doc) => (view.documentPath(doc, $.documents) || '/'), '/')
+        .then(url => {
+          res.cookie(prismic.previewCookie, previewToken, { maxAge: 60 * 30, path: '/', httpOnly: false });
+          res.redirect(url);
+        })
+        .catch(err => {
+          res.status(500).render('500', { message: err.message });
+        });
+    }
+  });
 
-router.get('/:collection/:page', (req, res, next) => {
-  const page = Number(req.params['page']);
-
-  if (isNaN(page)) {
-    next();
-  }
-  else {
+  router.get('/:collection', (req, res, next) => {
     const collection = req.params['collection'];
     const docType = pluralize(collection, 1);
-    const pagination = view.pagination(collection, res.locals.data[docType], page);
+    const config = $.documents[docType];
 
-    if (!pagination) {
+    if (config) {
+      res.locals.pagination = view.pagination(collection, res.locals.data[docType], 1);
+      res.render(`layouts/${collection}`);
+    }
+    else {
+      next();
+    }
+  });
+
+  router.get('/:collection/:page', (req, res, next) => {
+    const page = Number(req.params['page']);
+
+    if (isNaN(page)) {
       next();
     }
     else {
-      res.locals.pagination = pagination;
-      res.render(`layouts/${collection}`);
-    }
-  }
-});
+      const collection = req.params['collection'];
+      const docType = pluralize(collection, 1);
+      const pagination = view.pagination(collection, res.locals.data[docType], page);
 
-router.get('/:collection/:uid', (req, res, next) => {
-  const collection = req.params['collection'];
-  const docType = pluralize(collection, 1);
-  const uid = req.params['uid'];
-  const data = _.find(_.get(res.locals.data, `${docType}`), o => (o.uid === uid));
-
-  if (data) {
-    res.render(`layouts/${docType}`, data, (err, html) => {
-      if (err) {
-        res.render('404', { message: err });
+      if (!pagination) {
+        next();
       }
       else {
-        res.send(html);
+        res.locals.pagination = pagination;
+        res.render(`layouts/${collection}`);
       }
-    });
-  }
-  else {
-    next();
-  }
-});
+    }
+  });
+
+  router.get('/:collection/:uid', (req, res, next) => {
+    const collection = req.params['collection'];
+    const docType = pluralize(collection, 1);
+    const uid = req.params['uid'];
+    const data = _.find(_.get(res.locals.data, `${docType}`), o => (o.uid === uid));
+
+    if (data) {
+      res.render(`layouts/${docType}`, data, (err, html) => {
+        if (err) {
+          res.render('404', { message: err });
+        }
+        else {
+          res.send(html);
+        }
+      });
+    }
+    else {
+      next();
+    }
+  });
+}<% } %>
 
 router.get('*', (req, res, next) => {
   let path = `${req.path.split('/').join('/')}`;
@@ -126,4 +129,5 @@ router.get('*', (req, res, next) => {
     }
   });
 });
+
 module.exports = router;

@@ -11,8 +11,7 @@ package
 npm-debug.log
 dump.rdb
 .DS_STORE
-.tmp
-.prismic
-.jekyll-metadata
+.tmp<% if (cms === 'prismic') { %>
+.prismic<% } %>
 .ruby-version
 .secrets

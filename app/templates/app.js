@@ -2,8 +2,6 @@
 <% } %>
 'use strict';
 
-const $ = require('./config');
-const _ = require('lodash');
 const bodyParser = require('body-parser');
 const compress = require('compression');
 const cookieParser = require('cookie-parser');
@@ -66,8 +64,8 @@ app.use(express.static(task.dest(), {
   }
 }));
 
-// Set up Prismic previews if enabled.
-if (process.env.PRISMIC_PREVIEWS_ENABLED) app.use('/', require(task.config('routes')));
+// Set up routes.
+app.use('/', require(task.config('routes')));
 
 // Handle 404 error.
 app.use(function(req, res, next) {

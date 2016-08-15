@@ -1,20 +1,19 @@
 {
   "title": "<%= appname %>",
   "description": "",
-  "keywords": "",
-  "url": "http://www.example.com",
-  "locales": ["en"],
-  "autoRouting": true,
+  "keywords": "",<% if (sitetype === 'static') { %>
+  "url": "http://www.example.com",<% } %>
+  "locales": ["en"],<% if (routing) { %>
+  "autoRouting": true,<% } %>
   "sourceDir": "app",
   "buildDir": "public",
   "configDir": "config",
   "viewsDir": "app/views",
-  "cms": "prismic",
   "webFont": {
     "typekit": {
       "id": null
     }
-  },
+  }<% if (sitetype === 'static') { %>,
   "documents": {
-  }
+  }<% } %>
 }

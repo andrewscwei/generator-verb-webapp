@@ -1,6 +1,6 @@
 <% if (appauthor !== '') { %>// (c) <%= appauthor %>
 <% } %>
-'use strict';
+'use strict';<% if (sitetype === 'static') { %>
 
 const _ = require('lodash');
 const async = require('async');
@@ -9,9 +9,9 @@ const chalk = require('chalk');
 const fs = require('fs-extra');
 const path = require('path');
 const request = require('supertest');
-const task = require('../helpers/task-helpers');
+const task = require('../helpers/task-helpers');<% } %>
 
-describe('app', function() {
+describe('app', function() {<% if (sitetype === 'static') { %>
   let app;
 
   before(function(done) {
@@ -64,6 +64,5 @@ describe('app', function() {
             done();
         });
       });
-
-  });
+  });<% } %>
 });

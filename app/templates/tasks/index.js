@@ -5,9 +5,9 @@
  */
 
 const $ = require('../config');
-const gulp = require('gulp-sys-metalprismic');
-const task = require('../helpers/task-helpers');
-const view = require('../helpers/view-helpers');
+const gulp = <% if (sitetype === 'static') { %><% if (cms === 'prismic') { %>require('gulp-sys-metalprismic');<% } else { %>require('gulp-sys-metalsmith');<% } %><% } else { %>require('gulp-sys-assets');<% } %>
+const task = require('../helpers/task-helpers');<% if (sitetype === 'static') { %>
+const view = require('../helpers/view-helpers');<% } %>
 
 gulp.init({
   base: task.src(),
@@ -15,12 +15,12 @@ gulp.init({
   scripts: {
     entry: { application: 'application.js' },
     resolve: { root: [task.config('data')] }
-  },
-  views: process.env.PRISMIC_PREVIEWS_ENABLED ? false : {
+  }<% if (sitetype === 'static') { %>,
+  views: <% if (cms === 'prismic') { %>process.env.PRISMIC_PREVIEWS_ENABLED ? false : <% } %>{
     i18n: view.i18n(),
     metadata: view.metadata(),
     collections: $.documents,
     sitemap: { hostname: $.url },
     watch: { files: [task.config('**/*')] }
-  }
+  }<% } %>
 });
