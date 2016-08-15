@@ -86,13 +86,15 @@ module.exports = yeoman.Base.extend({
     }];
 
     return this.prompt(questions).then(answers => {
+      const features = answers.features || [];
+
       this.appauthor = answers.appauthor;
       this.sitetype = answers.sitetype;
       this.cms = answers.cms;
-      this.routing = answers.features.indexOf('routing') > -1;
-      this.circleci = answers.features.indexOf('circleci') > -1;
-      this.heroku = answers.features.indexOf('heroku') > -1;
-      this.scripts = answers.features.indexOf('scripts') > -1;
+      this.routing = features.indexOf('routing') > -1;
+      this.circleci = features.indexOf('circleci') > -1;
+      this.heroku = features.indexOf('heroku') > -1;
+      this.scripts = features.indexOf('scripts') > -1;
     });
   },
 
