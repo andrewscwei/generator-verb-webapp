@@ -79,6 +79,10 @@ module.exports = yeoman.Base.extend({
         value: 'heroku',
         checked: false
       }, {
+        name: 'Docker',
+        value: 'docker',
+        checked: false
+      }, {
         name: 'Custom scripts',
         value: 'scripts',
         checked: false
@@ -94,6 +98,7 @@ module.exports = yeoman.Base.extend({
       this.routing = features.indexOf('routing') > -1;
       this.circleci = features.indexOf('circleci') > -1;
       this.heroku = features.indexOf('heroku') > -1;
+      this.docker = features.indexOf('docker') > -1;
       this.scripts = features.indexOf('scripts') > -1;
     });
   },
@@ -111,7 +116,8 @@ module.exports = yeoman.Base.extend({
       if (this.cms !== 'prismic') ignores.push('prismic-helpers.js');
       if (!this.circleci) ignores.push('circle.yml');
       if (!this.heroku) ignores.push('.buildpacks');
-      if (!this.scripts) ignores.push('merge.sh');
+      if (!this.scripts) ignores.push('merge.sh', 'build.sh', 'run.sh');
+      if (!this.docker) ignores.push('.dockerignore', 'dockerfile', 'build.sh', 'run.sh');
       if ((this.sitetype === 'static') && (this.cms !== 'prismic')) ignores.push('app.js', '.nodemonignore');
 
       switch (basename) {
