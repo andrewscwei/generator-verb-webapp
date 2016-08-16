@@ -119,6 +119,7 @@ module.exports = yeoman.Base.extend({
       if (!this.scripts) ignores.push('merge.sh', 'build.sh', 'run.sh');
       if (!this.docker) ignores.push('.dockerignore', 'dockerfile', 'build.sh', 'run.sh');
       if ((this.sitetype === 'static') && (this.cms !== 'prismic')) ignores.push('app.js', '.nodemonignore');
+      if (this.sitetype === 'static') ignores.push('500.pug');
 
       switch (basename) {
         case '.DS_Store':
