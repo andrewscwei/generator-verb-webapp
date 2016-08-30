@@ -20,7 +20,9 @@ gulp.init({
     i18n: view.i18n(),
     metadata: view.metadata(),
     collections: $.documents,
-    sitemap: { hostname: $.url },
     watch: { files: [task.config('**/*')] }
+  },
+  sitemap: {
+    siteUrl: $.url
   }<% } %>
 });
