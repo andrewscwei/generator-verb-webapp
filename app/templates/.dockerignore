@@ -11,6 +11,7 @@ package
 npm-debug.log
 dump.rdb
 .DS_STORE
-.tmp
-.prismic
+.tmp<% if (cms === 'prismic') { %>
+.prismic<% } %><% } else if (cms === 'contentful') { %>
+.contentful<% } %>
 .ruby-version

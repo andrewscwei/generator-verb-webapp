@@ -1,6 +1,6 @@
 {
   "name": "generator-verb-webapp",
-  "version": "1.8.5",
+  "version": "2.0.0",
   "description": "Generator for static web app with Page.js, Metalsmith, Prismic.io + more",
   "license": "MIT",
   "repository": {
@@ -38,6 +38,7 @@
     "pagejs",
     "router",
     "prismic",
+    "contentful",
     "i18n"
   ],
   "dependencies": {

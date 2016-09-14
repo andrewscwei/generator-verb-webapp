@@ -11,6 +11,7 @@ Verb's Yeoman generator for a static web app.
   - [Babel](https://babeljs.io) ES6 -> ES5
   - [BrowserSync](http://www.browsersync.io) as dev server
   - [Prismic.io](http://prismic.io) support
+  - [Contentful](https://www.contentful.com/) support
   - Static asset revisioning (appending content hash to filenames)
   - CDN path remapping
   - i18n support
@@ -88,7 +89,7 @@ Verb's Yeoman generator for a static web app.
 |   +-- locales
 |   |   +-- en.json
 |   +-- routes
-|   |   +-- prismic.js
+|   |   +-- index.js
 |   +-- index.json
 +-- node_modules
 +-- public

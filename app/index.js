@@ -61,6 +61,9 @@ module.exports = yeoman.Base.extend({
       }, {
         name: 'Prismic.io',
         value: 'prismic'
+      }, {
+        name: 'Contentful',
+        value: 'contentful'
       }]
     },{
       type: 'checkbox',

@@ -5,7 +5,7 @@
  */
 
 const $ = require('../config');
-const gulp = <% if (sitetype === 'static') { %><% if (cms === 'prismic') { %>require('gulp-sys-metalprismic');<% } else { %>require('gulp-sys-metalsmith');<% } %><% } else { %>require('gulp-sys-assets');<% } %>
+const gulp = <% if (sitetype === 'static') { %><% if (cms === 'prismic') { %>require('gulp-sys-metalprismic');<% } else if (cms === 'contentful') { %>require('gulp-sys-metalcontentful');<% } else { %>require('gulp-sys-metalsmith');<% } %><% } else { %>require('gulp-sys-assets');<% } %>
 const task = require('../helpers/task-helpers');<% if (sitetype === 'static') { %>
 const view = require('../helpers/view-helpers');<% } %>
 
