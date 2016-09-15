@@ -5,7 +5,7 @@
 const $ = require('../../config');
 const _ = require('lodash');
 const log = require('debug')('app');<% if (cms === 'prismic') { %>
-const pluralize = require('pluralize');<% if (sitetype === 'prismic') { %>
+const pluralize = require('pluralize');<% if (sitetype === 'dynamic') { %>
 const prismic = require('../../helpers/prismic-helpers');<% } else { %>
 const prismic = require('gulp-sys-metalprismic/helpers/prismic-helpers');<% } %><% } %>
 const router = require('express').Router();<% if (cms === 'prismic') { %><% if (sitetype === 'dynamic') { %>

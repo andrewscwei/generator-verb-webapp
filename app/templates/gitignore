@@ -12,7 +12,7 @@ npm-debug.log
 dump.rdb
 .DS_STORE
 .tmp<% if (cms === 'prismic') { %>
-.prismic<% } %><% } else if (cms === 'contentful') { %>
+.prismic<% } else if (cms === 'contentful') { %>
 .contentful<% } %>
 .ruby-version
 .secrets

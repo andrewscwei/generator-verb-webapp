@@ -2,16 +2,16 @@
 <% } %>
 'use strict';<% if (sitetype === 'static') { %>
 
-const $ = requre('../config');
+const $ = require('../config');
 const _ = require('lodash');
 const async = require('async');
 const browserSync = require('browser-sync');
 const chalk = require('chalk');
 const fs = require('fs-extra');
 const path = require('path');
-const request = require('supertest');<% } %>
+const request = require('supertest');
 
-const baseDir = path.join(__dirname, '../');
+const baseDir = path.join(__dirname, '../');<% } %>
 
 describe('app', function() {<% if (sitetype === 'static') { %>
   let app;

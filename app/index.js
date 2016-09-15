@@ -116,7 +116,8 @@ module.exports = yeoman.Base.extend({
       let basename = path.basename(f);
       let ignores = [];
 
-      if ((this.cms !== 'prismic') || (this.sitetype !== 'dynamic')) ignores.push('prismic-helpers.js', 'view-helpers.js');
+      if ((this.cms !== 'prismic') || (this.sitetype !== 'dynamic')) ignores.push('prismic-helpers.js');
+      if (this.sitetype !== 'dynamic') ignores.push('view-helpers.js');
       if (!this.circleci) ignores.push('circle.yml');
       if (!this.heroku) ignores.push('.buildpacks');
       if (!this.scripts) ignores.push('merge.sh', 'build.sh', 'run.sh');

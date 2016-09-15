@@ -1,7 +1,5 @@
 {
-	"hello": {
-    "world": "Hello, world!"
-  },
+	"hello": "Hello, world!",
   "404": "404 not found",
   "500": "500 internal error"
 }

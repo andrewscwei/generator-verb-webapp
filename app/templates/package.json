@@ -1,6 +1,6 @@
 {
   "name": "<%= appname %>",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
   "license": "MIT",
   "engines": {
@@ -21,10 +21,10 @@
     "build": "gulp --gulpfile tasks/index.js",<% if (sitetype === 'static') { %>
     "dev": "NODE_ENV=development npm run build -- --watch --serve",
     "prod": "NODE_ENV=production npm run build -- --serve"<% if (cms === 'prismic') { %>,
-    "dev:server": "export PRISMIC_PREVIEWS_ENABLED=true && NODE_ENV=development npm run build -- --watch & nodemon --ext js,json,pug app"<% } %><% } else if (cms === 'prismic') { %>
-    "dev": "export PRISMIC_PREVIEWS_ENABLED=true && NODE_ENV=development npm run build -- --watch & nodemon --ext js,json,pug app",
+    "dev:server": "export PRISMIC_PREVIEWS_ENABLED=true && NODE_ENV=development npm run build && nodemon --ext js,json,pug app"<% } %><% } else if (cms === 'prismic') { %>
+    "dev": "export PRISMIC_PREVIEWS_ENABLED=true && NODE_ENV=development npm run build && nodemon --ext js,json,pug app",
     "prod": "export PRISMIC_PREVIEWS_ENABLED=true && NODE_ENV=production npm run build && node app"<% } else { %>
-    "dev": "NODE_ENV=development npm run build -- --watch & nodemon --ext js,json,pug app",
+    "dev": "NODE_ENV=development npm run build && nodemon --ext js,json,pug app",
     "prod": "NODE_ENV=production npm run build && node app"<% } %>
   },
   "dependencies": {<% if ((cms === 'prismic') || (sitetype === 'dynamic')) { %>
@@ -53,7 +53,7 @@
     "gulp-sys-metalprismic": "^5.0.3",<% } else if (cms === 'contentful') { %>
     "gulp-sys-metalcontentful": "^2.0.0",<% } else { %>
     "gulp-sys-metalsmith": "^2.1.1",<% } %><% } else { %>
-    "gulp-sys-assets": "^2.0.0",<% } %>
+    "gulp-sys-assets": "^2.1.0",<% } %>
     "mocha": "^3.0.2"<% if ((cms === 'prismic') || (sitetype === 'dynamic')) { %>,
     "nodemon": "^1.10.0"<% } %><% if (routing) { %>,
     "page-manager": "^1.2.0"<% } %><% if (sitetype === 'static') { %>,

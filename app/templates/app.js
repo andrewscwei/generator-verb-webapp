@@ -2,6 +2,8 @@
 <% } %>
 'use strict';
 
+const $ = require('./config');
+const _ = require('lodash');
 const bodyParser = require('body-parser');
 const compress = require('compression');
 const cookieParser = require('cookie-parser');
@@ -14,7 +16,7 @@ const log = require('debug')('app');
 const logger = require('morgan');
 const methodOverride = require('method-override');
 const path = require('path');<% if (sitetype === 'dynamic') { %>
-const view = require('gulp-sys-assets/helpers/view-helpers');<% } else { %><% if (cms === 'prismic') { %>
+const view = require('./helpers/view-helpers');<% } else { %><% if (cms === 'prismic') { %>
 const view = require('gulp-sys-metalprismic/helpers/view-helpers');<% } else if (cms === 'contentful') { %>
 const view = require('gulp-sys-metalcontentful/helpers/view-helpers');<% } else { %>
 const view = require('gulp-sys-metalsmith/helpers/view-helpers');<% } %><% } %>
@@ -29,8 +31,10 @@ app.set('view engine', 'pug');
 app.locals.basedir = path.join(baseDir, $.viewsDir);
 _.merge(app.locals, {
   $: $,
+  _: _,
+  m: require('moment'),
   data: require('require-dir')(path.join(baseDir, $.configDir, 'data'), { recurse: true }),
-  env: process.env<% if (sitetype === 'dynamic') { %>,
+  env: process.env<% if ((sitetype === 'dynamic') || (cms === 'prismic')) { %>,
   p: p => (view.getPath(p, path.join(baseDir, $.buildDir, 'rev-manifest.json')))<% } %>
 });
 
@@ -80,7 +84,7 @@ app.use(express.static(path.join(baseDir, $.buildDir), {
 }));
 
 // Set up routes.
-app.use('/', require(task.config('routes')));
+app.use('/', require(path.join(baseDir, $.configDir, 'routes')));
 
 // Handle 404 error.
 app.use(function(req, res, next) {

@@ -4,7 +4,6 @@ const $ = require('../config');
 const _ = require('lodash');
 const moment = require('moment');
 const requireDir = require('require-dir');
-const task = require('./task-helpers');
 
 /**
  * Resolves paths in view files. This method ensures that there are no
