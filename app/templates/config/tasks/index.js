@@ -4,11 +4,11 @@
  *       changes and serve the app in the dev server.
  */
 
-const $ = require('../config');
+const $ = require('../');
 const gulp = <% if (sitetype === 'static') { %><% if (cms === 'prismic') { %>require('gulp-sys-metalprismic');<% } else if (cms === 'contentful') { %>require('gulp-sys-metalcontentful');<% } else { %>require('gulp-sys-metalsmith');<% } %><% } else { %>require('gulp-sys-assets');<% } %>
 const path = require('path');
 
-const baseDir = path.join(__dirname, '../');
+const baseDir = path.join(__dirname, '../../');
 
 gulp.init({
   base: path.join(baseDir, $.sourceDir),

@@ -15,10 +15,10 @@
     "app.js"
   ],
   "scripts": {
-    "start": <% if ((cms === 'prismic') || (sitetype === 'dynamic')) { %>"node app"<% } else { %>"npm run prod"<% } %>,
+    "start": <% if ((cms === 'prismic') || (sitetype === 'dynamic')) { %>"node app"<% } else { %>"gulp serve --gulpfile config/tasks/index.js"<% } %>,
     "test": "mocha tests --recursive --reporter spec",
-    "clean": "gulp clean --gulpfile tasks/index.js",
-    "build": "gulp --gulpfile tasks/index.js",<% if (sitetype === 'static') { %>
+    "clean": "gulp clean --gulpfile config/tasks/index.js",
+    "build": "gulp --gulpfile config/tasks/index.js",<% if (sitetype === 'static') { %>
     "dev": "NODE_ENV=development npm run build -- --watch --serve",
     "prod": "NODE_ENV=production npm run build -- --serve"<% if (cms === 'prismic') { %>,
     "dev:server": "export PRISMIC_PREVIEWS_ENABLED=true && NODE_ENV=development npm run build && nodemon --ext js,json,pug app"<% } %><% } else if (cms === 'prismic') { %>
@@ -51,7 +51,7 @@
     "browser-sync": "^2.14.0",
     "chalk": "^1.1.3",<% if (cms === 'prismic') { %>
     "gulp-sys-metalprismic": "^5.0.3",<% } else if (cms === 'contentful') { %>
-    "gulp-sys-metalcontentful": "^2.0.0",<% } else { %>
+    "gulp-sys-metalcontentful": "^2.0.1",<% } else { %>
     "gulp-sys-metalsmith": "^2.1.1",<% } %><% } else { %>
     "gulp-sys-assets": "^2.1.0",<% } %>
     "mocha": "^3.0.2"<% if ((cms === 'prismic') || (sitetype === 'dynamic')) { %>,
