@@ -6,21 +6,30 @@
 
 const $ = require('../config');
 const gulp = <% if (sitetype === 'static') { %><% if (cms === 'prismic') { %>require('gulp-sys-metalprismic');<% } else if (cms === 'contentful') { %>require('gulp-sys-metalcontentful');<% } else { %>require('gulp-sys-metalsmith');<% } %><% } else { %>require('gulp-sys-assets');<% } %>
-const task = require('../helpers/task-helpers');<% if (sitetype === 'static') { %>
-const view = require('../helpers/view-helpers');<% } %>
+
+const baseDir = path.join(__dirname, '../');
 
 gulp.init({
-  base: task.src(),
-  dest: task.dest(),
+  base: path.join(baseDir, $.sourceDir),
+  dest: path.join(baseDir, $.buildDir),
   scripts: {
     entry: { application: 'application.js' },
-    resolve: { root: [task.config('data')] }
+    resolve: { root: [path.join(baseDir, $.configDir, 'data')] }
   }<% if (sitetype === 'static') { %>,
   views: <% if (cms === 'prismic') { %>process.env.PRISMIC_PREVIEWS_ENABLED ? false : <% } %>{
-    i18n: view.i18n(),
-    metadata: view.metadata(),
-    collections: $.documents,
-    watch: { files: [task.config('**/*')] }
+    i18n: {
+      locales: $.locales || ['en'],
+      directory: path.join(baseDir, $.configDir, 'locales')
+    },
+    metadata: {
+      _: require('lodash'),
+      $: $,
+      data: require('require-dir')(path.join(baseDir, $.configDir, 'data'), { recurse: true }),
+      env: process.env,
+      m: require('moment')
+    },
+    collections: $.collections,
+    watch: { files: [path.join(baseDir, $.configDir, '**/*')] }
   },
   sitemap: {
     siteUrl: $.url

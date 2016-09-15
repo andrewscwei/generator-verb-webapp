@@ -13,24 +13,39 @@ const i18n = require('i18n');
 const log = require('debug')('app');
 const logger = require('morgan');
 const methodOverride = require('method-override');
-const path = require('path');
-const task = require('./helpers/task-helpers');
-const view = require('./helpers/view-helpers');
+const path = require('path');<% if (sitetype === 'dynamic') { %>
+const view = require('gulp-sys-assets/helpers/view-helpers');<% } else { %><% if (cms === 'prismic') { %>
+const view = require('gulp-sys-metalprismic/helpers/view-helpers');<% } else if (cms === 'contentful') { %>
+const view = require('gulp-sys-metalcontentful/helpers/view-helpers');<% } else { %>
+const view = require('gulp-sys-metalsmith/helpers/view-helpers');<% } %><% } %>
+
+const baseDir = path.join(__dirname);
 
 // Create app and define global/local members.
 const app = express();
 app.set('port', process.env.PORT || 3000);
-app.set('views', task.views());
+app.set('views', path.join(baseDir, $.viewsDir));
 app.set('view engine', 'pug');
+app.locals.basedir = path.join(baseDir, $.viewsDir);
+_.merge(app.locals, {
+  $: $,
+  data: require('require-dir')(path.join(baseDir, $.configDir, 'data'), { recurse: true }),
+  env: process.env<% if (sitetype === 'dynamic') { %>,
+  p: p => (view.getPath(p, path.join(baseDir, $.buildDir, 'rev-manifest.json')))<% } %>
+});
 
 // Localization setup.
 // @see {@link https://www.npmjs.com/package/i18n}
-i18n.configure(view.i18n());
+i18n.configure({
+  default: (($.locales instanceof Array) ? $.locales[0] : $.locales) || 'en',
+  locales: $.locales || ['en'],
+  directory: path.join(baseDir, $.configDir, 'locales')
+});
 app.use(i18n.init);
 
 // Favicon serving setup.
 // @see {@link https://www.npmjs.com/package/serve-favicon}
-app.use(favicon(task.dest('favicon.png')));
+app.use(favicon(path.join(baseDir, $.buildDir, 'favicon.png')));
 
 // Enable gzip compression.
 // @see {@link https://www.npmjs.com/package/compression}
@@ -54,7 +69,7 @@ app.use(cookieParser());
 app.use(methodOverride());
 
 // Serve static files and add expire headers.
-app.use(express.static(task.dest(), {
+app.use(express.static(path.join(baseDir, $.buildDir), {
   setHeaders: function(res, path) {
     if (!/^\/assets\//.test(res.req.url)) return;
 

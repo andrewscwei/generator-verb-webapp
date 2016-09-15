@@ -12,16 +12,17 @@ const task = require('./task-helpers');
  * fingerprinted paths.
  *
  * @param {string} p
+ * @param {string} manifestPath
  *
  * @return {string}
  */
-exports.path = function(p) {
+exports.getPath = function(p, manifestPath) {
   // Ensure there are no relative paths.
   let regex = /^(?!.*:\/\/)\w+.*$/g
   if (regex.test(p)) p = `/${p}`;
 
   try {
-    let manifest = require(task.dest($.revManifest || 'rev-manifest.json'));
+    let manifest = require(manifestPath);
     if (!manifest) return p;
     let r = manifest[p] || manifest[p.substr(1)];
     if (!r) return p;
@@ -31,7 +32,7 @@ exports.path = function(p) {
   catch (err) {
     return p;
   }
-}<% if (sitetype === 'static') { %>
+};
 
 /**
  * Gets the path to the document under the given options.
@@ -41,7 +42,7 @@ exports.path = function(p) {
  *
  * @return {string}
  */
-exports.documentPath = function(doc, options) {
+exports.getDocumentPath = function(doc, options) {
   let pattern = _.get(options, `${doc.type}.permalink`);
   let ret = pattern;
 
@@ -58,25 +59,26 @@ exports.documentPath = function(doc, options) {
       ret = ret.replace(`:${key}`, val);
     }
 
-    return exports.path(ret);
+    return exports.getNormalizedPath(ret);
   }
 
   return null;
 };
 
 /**
- * Gets the pagination metadata arguments provided.
+ * Gets the pagination metadata with arguments provided.
  *
  * @param {string} collectionName
- * @param {Object} collection
+ * @param {Array} collection
  * @param {number} currentPage
+ * @param {Object} options
  *
  * @return {Object}
  */
-exports.pagination = function(collectionName, collection, currentPage) {
+exports.getPaginationData = function(collectionName, collection, currentPage, options) {
   if (!collection.length) return undefined;
 
-  const config = $.documents[collection[0].type];
+  const config = _.get(options, collection[0].type);
   const perPage = _.get(config, 'paginate.perPage');
 
   if (!config || isNaN(perPage)) return undefined;
@@ -106,35 +108,4 @@ exports.pagination = function(collectionName, collection, currentPage) {
   }
 
   return undefined;
-};<% } %>
-
-/**
- * Gets the metadata (local variables) for views.
- *
- * @return {Object}
- */
-exports.metadata = function() {
-  return {
-    $: $,
-    _: _,
-    basedir: task.views(),
-    data: requireDir(task.config('data'), { recurse: true }),
-    env: process.env,
-    m: moment,
-    p: exports.path
-  };
-};
-
-/**
- * Gets the i18n configuration settings.
- *
- * @return {Object}
- */
-exports.i18n = function() {
-  return {
-    default: _.nth($.locales, 0) || 'en',
-    locales: $.locales || ['en'],
-    directory: task.config('locales'),
-    objectNotation: true
-  };
 };

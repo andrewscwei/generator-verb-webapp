@@ -86,7 +86,7 @@ exports.reduce = function(docs, relative) {
           return docs.getNumber(k);
         case 'SliceZone':
           return docs.getSliceZone(k).asHtml((doc) => {
-            let pattern = _.get($, `documents.${doc.type}.permalink`);
+            let pattern = _.get($, `collections.${doc.type}.permalink`);
             let ret = pattern;
 
             if (pattern) {
