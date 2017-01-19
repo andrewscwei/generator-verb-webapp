@@ -1,5 +1,8 @@
 FROM node:6.1.0
 
+# Set environment variables
+ENV NODE_ENV development
+
 # Install NPM dependencies
 COPY package.json /var/<%= appname %>/
 WORKDIR /var/<%= appname %>
@@ -13,8 +16,6 @@ ADD tests /var/<%= appname %>/tests
 
 # Build static files
 RUN npm run build
-
-ENV NODE_ENV production
 
 # Run
 CMD npm start

@@ -85,10 +85,6 @@ module.exports = yeoman.Base.extend({
         name: 'Docker',
         value: 'docker',
         checked: false
-      }, {
-        name: 'Custom scripts',
-        value: 'scripts',
-        checked: false
       }]
     }];
 
@@ -102,7 +98,6 @@ module.exports = yeoman.Base.extend({
       this.circleci = features.indexOf('circleci') > -1;
       this.heroku = features.indexOf('heroku') > -1;
       this.docker = features.indexOf('docker') > -1;
-      this.scripts = features.indexOf('scripts') > -1;
     });
   },
 
@@ -120,9 +115,8 @@ module.exports = yeoman.Base.extend({
       if (this.sitetype !== 'dynamic') ignores.push('view-helpers.js');
       if (!this.circleci) ignores.push('circle.yml');
       if (!this.heroku) ignores.push('.buildpacks');
-      if (!this.scripts) ignores.push('merge.sh', 'build.sh', 'run.sh');
-      if (!this.docker) ignores.push('.dockerignore', 'dockerfile', 'build.sh', 'run.sh');
-      if ((this.sitetype === 'static') && (this.cms !== 'prismic')) ignores.push('app.js', '.nodemonignore');
+      if (!this.docker) ignores.push('dockerfile', 'dockerfile.dev', 'makefile');
+      if ((this.sitetype === 'static') && (this.cms !== 'prismic')) ignores.push('app.js');
       if (this.sitetype === 'static') ignores.push('500.pug');
 
       switch (basename) {
@@ -130,7 +124,7 @@ module.exports = yeoman.Base.extend({
           // Do nothing
           break;
         case 'gitignore':
-        case 'secrets':
+        case 'env':
           this.template(src, path.join(path.dirname(f), `.${basename}`));
           break;
         default:

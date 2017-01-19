@@ -9,12 +9,11 @@ const compress = require('compression');
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const favicon = require('serve-favicon');
-const fs = require('fs-extra');
+const fs = require('fs');
 const http = require('http');
 const i18n = require('i18n');
-const log = require('debug')('app');
-const logger = require('morgan');
 const methodOverride = require('method-override');
+const morgan = require('morgan');
 const path = require('path');<% if (sitetype === 'dynamic') { %>
 const view = require('./helpers/view-helpers');<% } else { %><% if (cms === 'prismic') { %>
 const view = require('gulp-sys-metalprismic/helpers/view-helpers');<% } else if (cms === 'contentful') { %>
@@ -57,7 +56,8 @@ app.use(compress());
 
 // HTTP request logger setup.
 // @see {@link https://www.npmjs.com/package/morgan}
-app.use(logger('combined', { stream: fs.createWriteStream(__dirname + '/logs/access.log', { flags: 'a' }) }));
+try { fs.mkdirSync(__dirname + '/logs'); } catch (err) {}
+app.use(morgan('combined', { stream: fs.createWriteStream(__dirname + '/logs/access.log', { flags: 'a' }) }));
 
 // Form body parsing setup.
 // @see {@link https://www.npmjs.com/package/body-parser}
@@ -101,11 +101,11 @@ http
     // Handle specific errors with friendly messages.
     switch (error.code) {
       case 'EACCES':
-        log(`Port ${this.address().port} requires elevated privileges`);
+        console.log(`Port ${this.address().port} requires elevated privileges`);
         process.exit(1);
         break;
       case 'EADDRINUSE':
-        log(`Port ${this.address().port} is already in use`);
+        console.log(`Port ${this.address().port} is already in use`);
         process.exit(1);
         break;
       default:
@@ -113,7 +113,7 @@ http
     }
   })
   .on('listening', function() {
-    log(`Listening at http://${this.address().address}:${this.address().port}`);
+    console.log(`Listening at http://${this.address().address}:${this.address().port}`);
   });
 
 module.exports = app;

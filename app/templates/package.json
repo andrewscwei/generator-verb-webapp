@@ -15,48 +15,46 @@
     "app.js"
   ],
   "scripts": {
-    "start": <% if ((cms === 'prismic') || (sitetype === 'dynamic')) { %>"node app"<% } else { %>"gulp serve --gulpfile config/tasks/index.js"<% } %>,
+    "start": <% if ((cms === 'prismic') || (sitetype === 'dynamic')) { %>"[ \"$NODE_ENV\" = \"development\" ] && nodemon --verbose --watch app.js --watch config --ext js,json,pug --debug app || node app"<% } else { %>"gulp serve --gulpfile config/tasks/index.js"<% } %>,
     "test": "mocha tests --recursive --reporter spec",
     "clean": "gulp clean --gulpfile config/tasks/index.js",
     "build": "gulp --gulpfile config/tasks/index.js",<% if (sitetype === 'static') { %>
     "dev": "NODE_ENV=development npm run build -- --watch --serve",
-    "prod": "NODE_ENV=production npm run build -- --serve"<% if (cms === 'prismic') { %>,
-    "dev:server": "export PRISMIC_PREVIEWS_ENABLED=true && NODE_ENV=development npm run build && nodemon --ext js,json,pug app"<% } %><% } else if (cms === 'prismic') { %>
-    "dev": "export PRISMIC_PREVIEWS_ENABLED=true && NODE_ENV=development npm run build && nodemon --ext js,json,pug app",
+    "prod": "NODE_ENV=production npm run build -- --serve"<% } else if (cms === 'prismic') { %>
+    "dev": "export PRISMIC_PREVIEWS_ENABLED=true && NODE_ENV=development npm run build && nodemon --verbose --watch app.js --watch config --ext js,json,pug --debug app",
     "prod": "export PRISMIC_PREVIEWS_ENABLED=true && NODE_ENV=production npm run build && node app"<% } else { %>
-    "dev": "NODE_ENV=development npm run build && nodemon --ext js,json,pug app",
+    "dev": "NODE_ENV=development npm run build && nodemon --verbose --watch app.js --watch config --ext js,json,pug --debug app",
     "prod": "NODE_ENV=production npm run build && node app"<% } %>
   },
   "dependencies": {<% if ((cms === 'prismic') || (sitetype === 'dynamic')) { %>
-    "body-parser": "^1.15.2",
+    "body-parser": "^1.16.0",
     "compression": "^1.6.2",
     "cookie-parser": "^1.4.3",
-    "debug": "^2.2.0",
     "express": "^4.14.0",<% } %>
-    "fs-extra": "^0.30.0",
     "i18n": "^0.8.3",
-    "lodash": "^4.15.0",<% if (sitetype === 'dynamic' && cms === 'prismic') { %>
+    "lodash": "^4.17.4",<% if (sitetype === 'dynamic' && cms === 'prismic') { %>
     "marked": "^0.3.6",<% } %><% if ((cms === 'prismic') || (sitetype === 'dynamic')) { %>
-    "method-override": "^2.3.6",<% } %>
+    "method-override": "^2.3.7",<% } %>
     "moment": "^2.14.1",<% if ((cms === 'prismic') || (sitetype === 'dynamic')) { %>
     "morgan": "^1.7.0",<% } %><% if (cms === 'prismic') { %>
-    "pluralize": "^3.0.0",<% if (sitetype === 'dynamic') { %>
+    "pluralize": "^3.1.0",<% if (sitetype === 'dynamic') { %>
     "prismic.io": "^3.1.3",<% } %><% } %>
-    "pug": "^2.0.0-beta5",
-    "require-dir": "^0.3.0"<% if ((cms === 'prismic') || (sitetype === 'dynamic')) { %>,
-    "serve-favicon": "^2.3.0"<% } %>
+    "pug": "^2.0.0-beta6",
+    "require-dir": "^0.3.1"<% if ((cms === 'prismic') || (sitetype === 'dynamic')) { %>,
+    "serve-favicon": "^2.3.2"<% } %>
   },
   "devDependencies": {<% if (sitetype === 'static') { %>
-    "async": "^2.0.1",
+    "async": "^2.1.4",
     "browser-sync": "^2.14.0",
     "chalk": "^1.1.3",<% if (cms === 'prismic') { %>
-    "gulp-sys-metalprismic": "^5.0.3",<% } else if (cms === 'contentful') { %>
-    "gulp-sys-metalcontentful": "^2.0.1",<% } else { %>
-    "gulp-sys-metalsmith": "^2.1.1",<% } %><% } else { %>
+    "gulp-sys-metalprismic": "^5.0.4",<% } else if (cms === 'contentful') { %>
+    "gulp-sys-metalcontentful": "^2.0.2",<% } else { %>
+    "gulp-sys-metalsmith": "^2.1.2",<% } %><% } else { %>
     "gulp-sys-assets": "^2.1.0",<% } %>
-    "mocha": "^3.0.2"<% if ((cms === 'prismic') || (sitetype === 'dynamic')) { %>,
-    "nodemon": "^1.10.0"<% } %><% if (routing) { %>,
+    "klaw": "^1.3.1",
+    "mocha": "^3.2.0"<% if ((cms === 'prismic') || (sitetype === 'dynamic')) { %>,
+    "nodemon": "^1.11.0"<% } %><% if (routing) { %>,
     "page-manager": "^1.2.0"<% } %><% if (sitetype === 'static') { %>,
-    "supertest": "^2.0.0"<% } %>
+    "supertest": "^2.0.1"<% } %>
   }
 }
