@@ -1,16 +1,16 @@
 {
   "name": "generator-verb-webapp",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "Generator for static web app with Page.js, Metalsmith, Prismic.io + more",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/StudioVerb/generator-verb-webapp"
+    "url": "https://gitlab.com/studioverb/generator-verb-webapp"
   },
   "author": {
     "name": "Andrew Wei <andrew@verb.studio>"
   },
-  "homepage": "https://github.com/StudioVerb/generator-verb-webapp#readme",
+  "homepage": "https://gitlab.com/studioverb/generator-verb-webapp#readme",
   "main": "app/index.js",
   "readmeFilename": "README.md",
   "engines": {
