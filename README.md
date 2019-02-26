@@ -121,7 +121,3 @@ $ yo verb-webapp [app-name]
 ```
 
 For details on initial setup procedures of the project, see its generated ```README.md``` file.
-
-## License
-
-This software is released under the [MIT License](http://opensource.org/licenses/MIT).
