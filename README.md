@@ -1,4 +1,4 @@
-# generator-verb-webapp
+# generator-verb-webapp ![](https://img.shields.io/maintenance/no/2016)
 
 Verb's Yeoman generator for a static web app.
 
